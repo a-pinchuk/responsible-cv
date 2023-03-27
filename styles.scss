@@ -227,3 +227,26 @@ body {
     font-size: 24px;
   }
 }
+
+.resume_image img {
+  transition: transform 0.5s;
+}
+
+.enlarged {
+  transform: scale(2);
+}
+
+.resume_title__letter::before {
+  content: attr(data-letter);
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: 30px;
+  border: 2px solid #000;
+  text-align: center;
+  margin-right: 10px;
+}
+
+.resume_title__letter {
+  margin-bottom: 15px;
+}
