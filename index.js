@@ -1,7 +1,6 @@
-// import { fetchRepo } from './api/fetchRepo';
+import { GitHubAPI } from './api/fetchRepo.js';
 
 const project = document.querySelector('.projects');
-console.log('🚀 ~ project:', project);
 
 document.addEventListener('DOMContentLoaded', function () {
   const resumeImage = document.querySelector('.resume_image img');
@@ -20,37 +19,30 @@ document.addEventListener('keydown', function (event) {
   }
 });
 
-const BASE_URL = 'https://api.github.com/users/a-pinchuk/repos';
-
-export const fetchRepo = async () => {
+window.addEventListener('load', async () => {
   try {
-    console.log('tyt');
-    const responce = await fetch(BASE_URL);
-    if (responce.ok) {
-      const data = await responce.json();
-      return data;
-    }
+    const token = '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';
+    const username = 'a-pinchuk';
+    const gitHubAPI = new GitHubAPI(token, username);
+    const repos = await gitHubAPI.getRepos();
+    const markup = repos
+      .slice(0, 10)
+      .map(el => {
+        return (
+          '<li>' +
+          '<a href=' +
+          el.owner.html_url +
+          '>' +
+          el.full_name +
+          '</a>' +
+          (el.description ? '<p>' + el.description + '</p>' : '') +
+          '</li>'
+        );
+      })
+      .join('');
+
+    project.insertAdjacentHTML('beforeend', markup);
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
-};
-
-fetchRepo().then(data => {
-  const markup = data
-    .slice(0, 10)
-    .map(el => {
-      return (
-        '<li>' +
-        '<a href=' +
-        el.owner.html_url +
-        '>' +
-        el.full_name +
-        '</a>' +
-        (el.description ? '<p>' + el.description + '</p>' : '') +
-        '</li>'
-      );
-    })
-    .join('');
-
-  project.insertAdjacentHTML('beforeend', markup);
 });
